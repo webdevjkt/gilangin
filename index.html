@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gilangin — Pesan Multi-Layanan Servis & Otomotif Langsung ke Rumah</title>
+  <meta name="description" content="Platform pemesanan jasa servis & perbaikan terpercaya se-Jabodetabek. Pilih beberapa layanan sekaligus: Otomotif, Servis AC, Laptop & PC, Listrik, dan Cleaning langsung ke lokasi Anda.">
+  
+  <!-- Google Fonts & Font Awesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Force HTTPS Redirect Script -->
+  <script>
+    if (location.protocol !== 'https:' && location.hostname !== 'localhost' && location.hostname !== '127.0.0.1') {
+      location.replace('https:' + window.location.href.substring(window.location.protocol.length));
+    }
+  </script>
+
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css?v=10.0">
+</head>
+<body>
+
+  <!-- Top Navigation Bar -->
+  <header class="navbar">
+    <div class="container nav-wrapper">
+      <a href="index.html" class="brand-logo">
+        <div class="brand-icon">
+          <i class="fa-solid fa-screwdriver-wrench"></i>
+        </div>
+        <span>Gilang<span style="color: var(--primary);">in</span></span>
+      </a>
+
+      <div class="nav-links">
+        <button class="nav-link active" id="navCatalogBtn" onclick="switchMainTab('catalog')">
+          <i class="fa-solid fa-layer-group"></i> <span>Katalog Layanan</span>
+        </button>
+        <button class="nav-link" id="navTrackingBtn" onclick="switchMainTab('tracking')">
+          <i class="fa-solid fa-clock-rotate-left"></i> <span>Tracking Pesanan</span>
+        </button>
+        <a href="admin.html" class="nav-link" title="Dashboard Manajemen Admin">
+          <i class="fa-solid fa-shield-halved"></i> <span>Panel Admin</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-banner">
+    <div class="container">
+      <div class="hero-badge">
+        <i class="fa-solid fa-bolt"></i> Bebas Pilih Lebih Dari 1 Layanan Sekaligus Se-Jabodetabek
+      </div>
+      <h1 class="hero-title">
+        Layanan Kebersihan, Pindahan & Otomotif <br><span style="color: var(--primary);">Pesan Langsung ke Rumah Anda</span>
+      </h1>
+      <p class="hero-subtitle">
+        Pilih paket layanan: Detailing & Coating Mobil, Deep Cleaning Kasur/Sofa/Toilet, dan Jasa Pindahan Rumah/Kost se-Jabodetabek.
+      </p>
+
+      <div class="hero-action-pills">
+        <button class="hero-pill active" id="tabCatalog" onclick="switchMainTab('catalog')">
+          <i class="fa-solid fa-layer-group"></i> Pilih Paket Layanan
+        </button>
+        <button class="hero-pill" id="tabTracking" onclick="switchMainTab('tracking')">
+          <i class="fa-solid fa-receipt"></i> Cek Status Tiket / Nota
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Container -->
+  <main class="container">
+    
+    <!-- SECTION 1: KATALOG LAYANAN BERDASARKAN GRUP -->
+    <section id="sectionCatalog">
+      <!-- Search & Filters Bar -->
+      <div class="search-filter-card">
+        <div class="search-row">
+          <div class="search-input-box">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="searchInput" placeholder="Cari layanan: Coating mobil, Jamur kaca, Cuci kasur, Deep clean toilet, Truk pindahan..." oninput="handleSearchFilter()">
+          </div>
+          
+          <div class="select-box">
+            <select id="locationFilter" onchange="handleSearchFilter()">
+              <!-- Options populated by JS -->
+            </select>
+          </div>
+
+          <button class="btn btn-outline btn-sm" onclick="resetFilters()" title="Reset Filter">
+            <i class="fa-solid fa-rotate-left"></i> <span>Reset</span>
+          </button>
+        </div>
+
+        <!-- Group Filter Pills -->
+        <div class="category-pills" id="groupFilterPills" style="margin-top: 14px; margin-bottom: 0;">
+          <!-- Populated dynamically by app.js -->
+        </div>
+      </div>
+
+      <!-- Groups & Service Packages Container -->
+      <div id="groupsContainer">
+        <!-- Rendered dynamically by app.js -->
+      </div>
+    </section>
+
+    <!-- SECTION 2: TRACKING STATUS PESANAN -->
+    <section id="sectionTracking" style="display: none;">
+      <div class="tracking-container">
+        <div class="search-filter-card" style="margin-bottom: 24px;">
+          <h3 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 12px; color: var(--secondary);">
+            <i class="fa-solid fa-clock-rotate-left" style="color: var(--primary);"></i> Lacak Status Pekerjaan / Tiket Servis
+          </h3>
+          <div class="search-row" style="margin-bottom: 0;">
+            <div class="search-input-box">
+              <i class="fa-solid fa-ticket"></i>
+              <input type="text" id="trackingSearchInput" placeholder="Masukkan ID Pesanan (Contoh: JOB-101, JOB-102)..." oninput="renderTrackingJobs()">
+            </div>
+            <button class="btn btn-primary" onclick="renderTrackingJobs()">
+              <i class="fa-solid fa-search"></i> Cari Tiket
+            </button>
+          </div>
+        </div>
+
+        <!-- Tracking List Container -->
+        <div id="trackingList">
+          <!-- Rendered dynamically by app.js -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Sticky Floating Multi-Service Cart Bar -->
+  <div class="floating-cart-bar" id="floatingCartBar">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <div style="width: 42px; height: 42px; border-radius: var(--radius-md); background: rgba(37, 99, 235, 0.25); color: #60a5fa; display: flex; align-items: center; justify-content: center; font-size: 1.25rem;">
+        <i class="fa-solid fa-cart-shopping"></i>
+      </div>
+      <div>
+        <div style="font-weight: 800; font-size: 0.95rem;">
+          <span id="cartCount">0</span> Layanan Terpilih
+        </div>
+        <div style="font-size: 0.8rem; color: #94a3b8;">
+          Total Estimasi: <strong id="cartTotalPrice" style="color: #38bdf8; font-size: 0.95rem;">Rp 0</strong>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; align-items: center; gap: 8px;">
+      <button class="btn btn-outline btn-sm" onclick="clearCart()" style="color: #cbd5e1; border-color: rgba(255, 255, 255, 0.2); font-size: 0.8rem;">
+        Bersihkan
+      </button>
+      <button class="btn btn-primary" onclick="openMultiBookingModal()" style="font-weight: 800; padding: 10px 18px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.5);">
+        <i class="fa-solid fa-calendar-check"></i> Pesan Sekarang (<span id="cartBtnCount">0</span>)
+      </button>
+    </div>
+  </div>
+
+  <!-- Modal 1: Detail Lengkap Layanan -->
+  <div class="modal-overlay" id="serviceDetailModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title" id="sdName">Detail Layanan</h3>
+          <div style="font-size: 0.8rem; color: var(--text-muted);" id="sdGroupBadge">Kategori Layanan</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('serviceDetailModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p id="sdDescription" style="color: var(--text-muted); font-size: 0.95rem; line-height: 1.6; margin-bottom: 16px;"></p>
+        
+        <div style="background: #f8fafc; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px; margin-bottom: 18px;">
+          <div style="font-size: 0.85rem; font-weight: 700; color: var(--secondary); margin-bottom: 8px;">
+            <i class="fa-solid fa-circle-check" style="color: #059669;"></i> Keunggulan & Spesifikasi Pengerjaan:
+          </div>
+          <div class="vendor-badges" id="sdFeatures"></div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; background: #eff6ff; padding: 12px 16px; border-radius: var(--radius-md); border: 1px solid #bfdbfe;">
+          <div>
+            <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Tarif Paket</div>
+            <div style="font-size: 1.3rem; font-weight: 800; color: var(--primary);" id="sdPrice">Rp 0</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 0.78rem; color: var(--text-muted); font-weight: 600;">Estimasi & Garansi</div>
+            <div style="font-size: 0.88rem; font-weight: 700; color: #059669;" id="sdWarranty">Garansi 30 Hari</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('serviceDetailModal')">Tutup</button>
+        <button class="btn btn-primary" id="sdBookBtn">
+          <i class="fa-solid fa-cart-plus"></i> Tambah ke Pesanan
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Formulir Pesanan Multi-Layanan (Multi-Service Booking) -->
+  <div class="modal-overlay" id="bookingModal">
+    <div class="modal-card" style="max-width: 650px;">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Formulir Pemesanan Layanan</h3>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Periksa daftar layanan pilihan Anda dan lengkapi data kedatangan.</div>
+        </div>
+        <button class="modal-close" onclick="closeModal('bookingModal')">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+      <form id="bookingForm" onsubmit="handleBookingSubmit(event)">
+        <div class="modal-body" style="max-height: 75vh; overflow-y: auto;">
+          
+          <!-- Daftar Layanan Terpilih -->
+          <div style="margin-bottom: 20px;">
+            <label class="form-label" style="font-size: 0.95rem; font-weight: 800; color: var(--secondary);">
+              <i class="fa-solid fa-list-check" style="color: var(--primary);"></i> Layanan yang Dipilih (<span id="modalCartCount">0</span>):
+            </label>
+            <div id="modalSelectedItemsList">
+              <!-- Rendered dynamically -->
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: var(--radius-md); padding: 12px 16px; margin-top: 10px;">
+              <span style="font-weight: 700; color: var(--secondary);">Total Estimasi Biaya:</span>
+              <span style="font-size: 1.3rem; font-weight: 800; color: var(--primary);" id="modalTotalPriceDisplay">Rp 0</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Nama Lengkap Pemesan *</label>
+            <input type="text" class="form-control" id="bkCustomer" placeholder="Contoh: Bpk. Wahyu Hermawan" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Nomor WhatsApp / HP *</label>
+            <input type="tel" class="form-control" id="bkPhone" placeholder="Contoh: 081234567890" required>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Tanggal Pelaksanaan *</label>
+              <input type="date" class="form-control" id="bkDate" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Waktu / Jam (24 Jam) *</label>
+              <select class="form-control" id="bkTime" required>
+                <option value="07:00">07:00 WIB (Pagi)</option>
+                <option value="07:30">07:30 WIB</option>
+                <option value="08:00">08:00 WIB</option>
+                <option value="08:30">08:30 WIB</option>
+                <option value="09:00" selected>09:00 WIB (Pagi)</option>
+                <option value="09:30">09:30 WIB</option>
+                <option value="10:00">10:00 WIB</option>
+                <option value="10:30">10:30 WIB</option>
+                <option value="11:00">11:00 WIB (Siang)</option>
+                <option value="11:30">11:30 WIB</option>
+                <option value="12:00">12:00 WIB</option>
+                <option value="13:00">13:00 WIB (Siang)</option>
+                <option value="13:30">13:30 WIB</option>
+                <option value="14:00">14:00 WIB (Sore)</option>
+                <option value="14:30">14:30 WIB</option>
+                <option value="15:00">15:00 WIB</option>
+                <option value="15:30">15:30 WIB</option>
+                <option value="16:00">16:00 WIB</option>
+                <option value="16:30">16:30 WIB</option>
+                <option value="17:00">17:00 WIB</option>
+                <option value="17:30">17:30 WIB</option>
+                <option value="18:00">18:00 WIB (Malam)</option>
+                <option value="18:30">18:30 WIB</option>
+                <option value="19:00">19:00 WIB</option>
+                <option value="19:30">19:30 WIB</option>
+                <option value="20:00">20:00 WIB</option>
+                <option value="21:00">21:00 WIB</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Wilayah Kota *</label>
+            <select class="form-control" id="bkLocation" required>
+              <!-- Populated by JS -->
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Alamat Lengkap Lokasi Kedatangan *</label>
+            <textarea class="form-control" id="bkAddress" rows="2" placeholder="Nama jalan, nomor rumah/ruko, RT/RW, kelurahan, patokan lokasi..." required></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Catatan Tambahan / Tipe Unit / Instruksi Khusus</label>
+            <textarea class="form-control" id="bkNotes" rows="2" placeholder="Contoh: Mobil Pajero Sport Hitam, AC kamar 1 PK Daikin, atau detail instruksi..."></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal('bookingModal')">Batal</button>
+          <button type="submit" class="btn btn-primary" id="btnSubmitBooking">
+            <i class="fa-solid fa-paper-plane"></i> Konfirmasi & Kirim Pesanan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <p>&copy; 2026 <strong>Gilangin</strong> — Platform On-Demand Servis, Otomotif & Perbaikan Langsung Se-Jabodetabek.</p>
+    </div>
+  </footer>
+
+  <!-- Scripts with Cache Busting -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase.js?v=9.5"></script>
+  <script src="data.js?v=9.5"></script>
+  <script src="telegram.js?v=9.5"></script>
+  <script src="app.js?v=9.5"></script>
+</body>
+</html>
